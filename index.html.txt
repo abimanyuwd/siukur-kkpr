@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="SIUKUR-KKPR - Sistem Informasi Pengukuran dan Kesesuaian Kegiatan Pemanfaatan Ruang">
+
+    <title>SIUKUR-KKPR | Sistem Informasi Pengukuran</title>
+
+    <!-- Favicon SVG Modern -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2338bdf8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6'></polygon><line x1='8' y1='2' x2='8' y2='18'></line><line x1='16' y1='6' x2='16' y2='22'></line></svg>">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            height: 100dvh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #0f172a;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #f8fafc;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Pembungkus Iframe Layar Penuh */
+        .iframe-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            border: none;
+            overflow: hidden;
+            z-index: 1;
+            background-color: #0f172a;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+            background-color: transparent;
+        }
+
+        /* Overlay Loading Screen (Human-Crafted Slate/Navy Aesthetic) */
+        #loaderOverlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        #loaderOverlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loader-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 360px;
+            width: 100%;
+        }
+
+        /* Ikon Logo SVG */
+        .logo-box {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: #38bdf8;
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.6);
+        }
+
+        .logo-box svg {
+            width: 34px;
+            height: 34px;
+        }
+
+        .app-title {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #f8fafc;
+            margin-bottom: 6px;
+        }
+
+        .app-subtitle {
+            font-size: 13px;
+            color: #94a3b8;
+            font-weight: 400;
+            line-height: 1.4;
+            margin-bottom: 28px;
+        }
+
+        /* Spinner Ring Halus */
+        .spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid rgba(148, 163, 184, 0.2);
+            border-top-color: #38bdf8;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 14px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            font-size: 13px;
+            color: #cbd5e1;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+        }
+
+        /* Tombol Cadangan Jika Loading Lambat (Fallback) */
+        .fallback-container {
+            margin-top: 32px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .fallback-container.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .fallback-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #94a3b8;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            padding: 8px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .fallback-btn:hover {
+            color: #f8fafc;
+            border-color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+        }
+
+        .fallback-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Layar Loading Halus (Splash Screen) -->
+    <div id="loaderOverlay">
+        <div class="loader-card">
+            <div class="logo-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                    <line x1="8" y1="2" x2="8" y2="18"></line>
+                    <line x1="16" y1="6" x2="16" y2="22"></line>
+                </svg>
+            </div>
+            <h1 class="app-title">SIUKUR - KKPR</h1>
+            <p class="app-subtitle">Sistem Informasi Pengukuran &amp; KKPR</p>
+            <div class="spinner"></div>
+            <p class="loading-text" id="statusText">Menghubungkan ke server...</p>
+
+            <!-- Tombol Darurat (Muncul otomatis jika loading melebihi 7 detik) -->
+            <div class="fallback-container" id="fallbackBox">
+                <a href="https://script.google.com/macros/s/AKfycbzU98ipbWefi4O_vzkkr-HevNr0xrGTc97uuguPnJoE2JWiVLextd1YDPr4cXaiR60Obg/exec" 
+                   target="_blank" 
+                   rel="noopener noreferrer" 
+                   class="fallback-btn">
+                    <span>Buka langsung di tab baru</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Frame Aplikasi Google Apps Script Layar Penuh -->
+    <div class="iframe-container">
+        <iframe 
+            id="appFrame"
+            src="https://script.google.com/macros/s/AKfycbzU98ipbWefi4O_vzkkr-HevNr0xrGTc97uuguPnJoE2JWiVLextd1YDPr4cXaiR60Obg/exec"
+            allow="geolocation; camera; microphone; clipboard-read; clipboard-write; fullscreen"
+            loading="eager"
+            title="Aplikasi SIUKUR KKPR">
+        </iframe>
+    </div>
+
+    <script>
+        (function () {
+            const frame = document.getElementById('appFrame');
+            const loader = document.getElementById('loaderOverlay');
+            const fallbackBox = document.getElementById('fallbackBox');
+            const statusText = document.getElementById('statusText');
+
+            let isLoaded = false;
+
+            // Fungsi saat frame selesai memuat
+            function hideLoader() {
+                if (isLoaded) return;
+                isLoaded = true;
+                if (loader) {
+                    loader.classList.add('hidden');
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                    }, 400);
+                }
+            }
+
+            // Dengarkan event load dari iframe
+            frame.addEventListener('load', hideLoader);
+
+            // Timeout Pengaman (Bila loading melebihi 7 detik karena koneksi atau cookie browser)
+            setTimeout(function () {
+                if (!isLoaded) {
+                    if (statusText) statusText.textContent = "Membutuhkan waktu lebih lama...";
+                    if (fallbackBox) fallbackBox.classList.add('visible');
+                }
+            }, 7000);
+        })();
+    </script>
+</body>
+
+</html>
