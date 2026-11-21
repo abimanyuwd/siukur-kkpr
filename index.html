@@ -7,12 +7,21 @@
     <meta name="theme-color" content="#0f172a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="description" content="SIUKUR-KKPR - Sistem Informasi Pengukuran dan Kesesuaian Kegiatan Pemanfaatan Ruang">
+    
+    <!-- Meta SEO & Identitas Resmi -->
+    <title>SIUKUR-KKPR | Sistem Informasi Uji Kesesuaian dan Pengukuran Ruang</title>
+    <meta name="description" content="SIUKUR-KKPR - Sistem Informasi Uji Kesesuaian dan Pengukuran Ruang">
 
-    <title>SIUKUR-KKPR | Sistem Informasi Pengukuran</title>
+    <!-- Open Graph untuk Pratinjau Sosial Media (WhatsApp, Telegram, dll) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="SIUKUR-KKPR | Sistem Informasi Uji Kesesuaian dan Pengukuran Ruang">
+    <meta property="og:description" content="Aplikasi resmi Sistem Informasi Uji Kesesuaian dan Pengukuran Ruang.">
+    <meta property="og:image" content="logo.png">
 
-    <!-- Favicon SVG Modern -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2338bdf8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6'></polygon><line x1='8' y1='2' x2='8' y2='18'></line><line x1='16' y1='6' x2='16' y2='22'></line></svg>">
+    <!-- Favicon & Touch Icon -->
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <link rel="apple-touch-icon" href="logo.png">
 
     <style>
         * {
@@ -62,7 +71,7 @@
             position: fixed;
             inset: 0;
             z-index: 9999;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            background: linear-gradient(135deg, #0b1120 0%, #0f172a 50%, #1e293b 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -82,55 +91,51 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            max-width: 360px;
+            max-width: 420px;
             width: 100%;
         }
 
-        /* Ikon Logo SVG */
-        .logo-box {
-            width: 64px;
-            height: 64px;
-            border-radius: 16px;
-            background: rgba(56, 189, 248, 0.1);
-            border: 1px solid rgba(56, 189, 248, 0.25);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        /* Logo Resmi SIUKUR-KKPR */
+        .logo-wrapper {
+            position: relative;
             margin-bottom: 20px;
-            color: #38bdf8;
-            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.6);
         }
 
-        .logo-box svg {
-            width: 34px;
-            height: 34px;
+        .app-logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 22px;
+            object-fit: cover;
+            box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
         }
 
         .app-title {
-            font-size: 20px;
-            font-weight: 700;
+            font-size: 22px;
+            font-weight: 800;
             letter-spacing: -0.02em;
-            color: #f8fafc;
+            color: #ffffff;
             margin-bottom: 6px;
         }
 
         .app-subtitle {
             font-size: 13px;
             color: #94a3b8;
-            font-weight: 400;
-            line-height: 1.4;
-            margin-bottom: 28px;
+            font-weight: 500;
+            line-height: 1.5;
+            max-width: 320px;
+            margin-bottom: 26px;
         }
 
         /* Spinner Ring Halus */
         .spinner {
-            width: 36px;
-            height: 36px;
+            width: 34px;
+            height: 34px;
             border: 3px solid rgba(148, 163, 184, 0.2);
             border-top-color: #38bdf8;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
         @keyframes spin {
@@ -148,7 +153,7 @@
 
         /* Tombol Cadangan Jika Loading Lambat (Fallback) */
         .fallback-container {
-            margin-top: 32px;
+            margin-top: 28px;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
@@ -167,17 +172,17 @@
             font-weight: 500;
             color: #94a3b8;
             background: rgba(30, 41, 59, 0.8);
-            border: 1px solid rgba(148, 163, 184, 0.2);
-            padding: 8px 14px;
-            border-radius: 8px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            padding: 9px 16px;
+            border-radius: 10px;
             text-decoration: none;
             transition: all 0.2s ease;
         }
 
         .fallback-btn:hover {
-            color: #f8fafc;
+            color: #ffffff;
             border-color: #38bdf8;
-            background: rgba(56, 189, 248, 0.1);
+            background: rgba(56, 189, 248, 0.12);
         }
 
         .fallback-btn svg {
@@ -192,15 +197,14 @@
     <!-- Layar Loading Halus (Splash Screen) -->
     <div id="loaderOverlay">
         <div class="loader-card">
-            <div class="logo-box">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
-                    <line x1="8" y1="2" x2="8" y2="18"></line>
-                    <line x1="16" y1="6" x2="16" y2="22"></line>
-                </svg>
+            <div class="logo-wrapper">
+                <img src="logo.png" 
+                     alt="Logo SIUKUR KKPR" 
+                     class="app-logo"
+                     onerror="if(!this.dataset.fallback){this.dataset.fallback='1'; this.src='logo.jpg';}">
             </div>
             <h1 class="app-title">SIUKUR - KKPR</h1>
-            <p class="app-subtitle">Sistem Informasi Pengukuran &amp; KKPR</p>
+            <p class="app-subtitle">Sistem Informasi Uji Kesesuaian dan Pengukuran Ruang</p>
             <div class="spinner"></div>
             <p class="loading-text" id="statusText">Menghubungkan ke server...</p>
 
@@ -256,7 +260,7 @@
             // Dengarkan event load dari iframe
             frame.addEventListener('load', hideLoader);
 
-            // Timeout Pengaman (Bila loading melebihi 7 detik karena koneksi atau cookie browser)
+            // Timeout Pengaman (Bila loading melebihi 7 detik)
             setTimeout(function () {
                 if (!isLoaded) {
                     if (statusText) statusText.textContent = "Membutuhkan waktu lebih lama...";
