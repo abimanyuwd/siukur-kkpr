@@ -1,44 +1,44 @@
 # SIUKUR-KKPR Web Wrapper (GitHub & Vercel)
 
-Tautan pembungkus modern (*web wrapper*) untuk Web App Google Apps Script **SIUKUR-KKPR** (Sistem Informasi Pengukuran & Kesesuaian Kegiatan Pemanfaatan Ruang).
+Tautan pembungkus resmi (*web wrapper*) untuk Web App Google Apps Script **SIUKUR-KKPR** (Sistem Informasi Uji Kesesuaian dan Pengukuran Ruang).
 
 ---
 
 ## 🌟 Fitur Utama Wrapper
+- **Identitas & Logo Resmi:** Menampilkan logo resmi SIUKUR-KKPR (peta Indonesia, theodolite, tata ruang hijau, pin lokasi) pada Splash Screen dan Favicon tab browser.
 - **Layar Penuh Responsif (100dvh):** Menyesuaikan otomatis dengan layar HP (Android & iPhone) tanpa terpotong bilah alamat browser.
-- **Izin Sensor Aktif:** Dilengkapi izin kamera dan penanda lokasi GPS (`geolocation; camera`) agar formulir pengukuran dapat bekerja optimal.
-- **Splash Screen Elegan:** Menampilkan layar loading berkelas saat Web App sedang memuat.
-- **Tombol Darurat (Fallback):** Tersedia tombol pembuka otomatis jika pengguna mengalami kendala koneksi.
+- **Izin Sensor Aktif:** Dilengkapi izin kamera dan penanda lokasi GPS (`geolocation; camera`) agar formulir survei/pengukuran dapat bekerja optimal.
+- **Splash Screen Elegan:** Menampilkan layar loading berkelas dengan nuansa Slate/Navy yang adem saat Web App sedang memuat.
+- **Tombol Darurat (Fallback):** Tersedia tombol pembuka otomatis jika pengguna mengalami kendala koneksi internet.
 
 ---
 
-## 🚀 Panduan Deploy ke Vercel (Gratis & Cepat)
+## 📁 Struktur Berkas Repositori
+Pastikan berkas-berkas berikut ada di dalam folder proyek Anda sebelum di-push ke GitHub:
+1. `index.html` : Halaman pembungkus utama aplikasi.
+2. `logo.png` (atau `logo.jpg`): Berkas gambar logo resmi SIUKUR-KKPR.
+3. `vercel.json` : Konfigurasi rute statis & security headers Vercel.
+4. `README.md` : Petunjuk dokumentasi proyek ini.
 
-### Langkah 1: Upload Projek ke GitHub
-1. Buka [GitHub.com](https://github.com) dan buat repositori baru (misal: `siukur-kkpr`).
-2. Masukkan semua berkas dari folder ini (`index.html`, `vercel.json`, `README.md`) ke repositori GitHub Anda.
-   *(Bisa menggunakan Git CLI, aplikasi GitHub Desktop, atau langsung upload berkas di website GitHub).*
+---
 
-### Langkah 2: Hubungkan ke Vercel
-1. Buka [Vercel.com](https://vercel.com) dan login menggunakan akun GitHub Anda.
-2. Klik tombol **"Add New..."** lalu pilih **"Project"**.
-3. Cari repositori **`siukur-kkpr`** yang baru Anda buat, lalu klik **"Import"**.
-4. Pada bagian pengaturan proyek, biarkan semua pengaturan default (Framework Preset: *Other*).
-5. Klik **"Deploy"**.
-6. Dalam hitungan detik, Anda akan mendapatkan URL kustom gratis yang rapi dan aman, misalnya:
-   `https://siukur-kkpr.vercel.app`
+## 🚀 Panduan Update ke GitHub & Vercel
+
+1. Simpan gambar logo resmi ke dalam folder ini dengan nama **`logo.png`** (atau `logo.jpg`).
+2. Masukkan / commit pembaruan berkas (`index.html`, `logo.png`, `README.md`) ke repositori GitHub Anda.
+3. Vercel akan secara otomatis mendeteksi perubahan tersebut dan melakukan **Redeploy** dalam hitungan detik!
+4. Buka kembali tautan Vercel Anda (misal: `https://siukur-kkpr.vercel.app`), logo dan nama resmi baru sudah langsung aktif!
 
 ---
 
 ## ⚠️ Pengaturan Wajib di Google Apps Script (`code.gs`)
-Agar Google mengizinkan aplikasinya disematkan di dalam iframe Vercel / GitHub Pages tanpa kendala *"Refused to connect"*, pastikan kode backend `doGet()` di editor Google Apps Script Anda memiliki baris `.setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)`:
+Pastikan fungsi `doGet()` di Google Apps Script Anda memuat baris:
 
 ```javascript
 function doGet() {
-  return HtmlService.createHtmlOutputFromFile('index') // atau nama file antarmuka Anda
+  return HtmlService.createHtmlOutputFromFile('index')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
     .setTitle('SIUKUR-KKPR');
 }
 ```
-
-> **Catatan Penting:** Setelah memperbarui kode di atas pada editor Google Apps Script, pastikan klik **Terapkan (Deploy)** > **Kelola Penerapan (Manage Deployments)** > Edit ke **Versi Baru (New Version)** agar perubahannya aktif secara publik.
+*(Setelah itu klik Deploy > Manage Deployments > Edit ke Versi Baru).*
