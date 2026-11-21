@@ -18,9 +18,9 @@
     <meta property="og:description" content="Aplikasi resmi Sistem Informasi Uji Kesesuaian dan Pengukuran Ruang.">
     <meta property="og:image" content="logo.png">
 
-    <!-- Favicon & Touch Icon -->
+    <!-- Favicon Pintar: Otomatis gunakan logo.png jika ada, atau fallback ke ikon SVG resmi -->
     <link rel="icon" type="image/png" href="logo.png">
-    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230f172a'/><path d='M6 22 L11 10 L16 18 L21 12 L26 22 Z' fill='%230284c7' opacity='0.7'/><circle cx='16' cy='13' r='5' fill='%23ea580c'/><circle cx='16' cy='13' r='2' fill='%23ffffff'/><path d='M16 18 L16 23' stroke='%23ea580c' stroke-width='2'/></svg>">
     <link rel="apple-touch-icon" href="logo.png">
 
     <style>
@@ -95,19 +95,34 @@
             width: 100%;
         }
 
-        /* Logo Resmi SIUKUR-KKPR */
+        /* Wadah Logo Pintar (Graceful Fallback) */
         .logo-wrapper {
             position: relative;
-            margin-bottom: 20px;
+            width: 108px;
+            height: 108px;
+            margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
+        /* Gambar Fisik: Disembunyikan dulu sampai benar-benar berhasil dimuat */
         .app-logo {
-            width: 100px;
-            height: 100px;
-            border-radius: 22px;
+            display: none;
+            width: 100%;
+            height: 100%;
+            border-radius: 24px;
             object-fit: cover;
-            box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s ease;
+            box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.12);
+        }
+
+        /* Fallback Vektor Elegan (Muncul jika file logo.png belum ada di GitHub) */
+        .vector-fallback {
+            width: 100%;
+            height: 100%;
+            border-radius: 24px;
+            box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(56, 189, 248, 0.25);
+            display: block;
         }
 
         .app-title {
@@ -123,7 +138,7 @@
             color: #94a3b8;
             font-weight: 500;
             line-height: 1.5;
-            max-width: 320px;
+            max-width: 330px;
             margin-bottom: 26px;
         }
 
@@ -197,12 +212,52 @@
     <!-- Layar Loading Halus (Splash Screen) -->
     <div id="loaderOverlay">
         <div class="loader-card">
+            
+            <!-- Wadah Logo Bebas Rusak (Anti-Broken Image) -->
             <div class="logo-wrapper">
-                <img src="logo.png" 
+                <!-- 1. Logo Asli (Aktif otomatis saat file logo.png / logo.jpg di-upload) -->
+                <img id="realLogo"
+                     src="logo.png" 
                      alt="Logo SIUKUR KKPR" 
                      class="app-logo"
-                     onerror="if(!this.dataset.fallback){this.dataset.fallback='1'; this.src='logo.jpg';}">
+                     onload="onLogoLoaded()"
+                     onerror="onLogoError(this)">
+
+                <!-- 2. Logo Vektor Resmi (Tampil mulus jika file fisik belum ada) -->
+                <svg id="vectorFallback" class="vector-fallback" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Background Squircle Navy -->
+                    <rect width="100" height="100" rx="24" fill="#0d1b2a"/>
+                    
+                    <!-- Grid Latar Garis Tipis -->
+                    <path d="M0 25 H100 M0 50 H100 M0 75 H100 M25 0 V100 M50 0 V100 M75 0 V100" stroke="#1b2a47" stroke-width="0.8" opacity="0.6"/>
+                    
+                    <!-- Siluet Gedung Kota (Kanan) -->
+                    <rect x="66" y="28" width="8" height="24" rx="1" fill="#38bdf8" opacity="0.7"/>
+                    <rect x="76" y="24" width="9" height="28" rx="1" fill="#0284c7" opacity="0.9"/>
+                    
+                    <!-- Siluet Daun Hijau Tata Ruang (Kiri) -->
+                    <path d="M34 32 C30 26 36 22 40 26 C40 30 36 34 34 32 Z" fill="#22c55e" opacity="0.9"/>
+                    
+                    <!-- Siluet Pulau Indonesia (Hijau & Biru) -->
+                    <path d="M18 48 C22 42 28 45 32 42 C36 40 42 44 48 41 C54 43 62 40 70 43 C78 45 84 52 80 55 C70 56 60 52 50 54 C40 55 30 52 20 54 Z" fill="#15803d" opacity="0.75"/>
+                    <path d="M24 45 C30 43 38 46 44 43 C50 45 58 44 64 45 C58 48 50 49 42 47 C34 49 28 48 24 45 Z" fill="#38bdf8" opacity="0.85"/>
+                    
+                    <!-- Alat Ukur Theodolite / Tripod & Penggaris Oranye -->
+                    <line x1="52" y1="36" x2="62" y2="20" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M48 38 L54 28 L60 38" stroke="#d97706" stroke-width="2" stroke-linecap="round"/>
+                    
+                    <!-- Pin Lokasi Oranye Utama -->
+                    <path d="M50 16 C44 16 39 21 39 27 C39 35 50 46 50 46 C50 46 61 35 61 27 C61 21 56 16 50 16 Z" fill="#ea580c"/>
+                    <circle cx="50" cy="26" r="4.5" fill="#ffffff"/>
+                    
+                    <!-- Emblem Shield Bawah SIUKUR KKPR -->
+                    <path d="M14 62 L86 62 L80 82 L50 92 L20 82 Z" fill="#0a192f" stroke="#166534" stroke-width="2"/>
+                    <text x="50" y="74" fill="#ffffff" font-size="11" font-weight="900" font-family="sans-serif" text-anchor="middle" letter-spacing="1">SIUKUR</text>
+                    <path d="M26 77 H74 L68 86 L50 90 L32 86 Z" fill="#15803d"/>
+                    <text x="50" y="86" fill="#ffffff" font-size="8" font-weight="800" font-family="sans-serif" text-anchor="middle" letter-spacing="1.2">KKPR</text>
+                </svg>
             </div>
+
             <h1 class="app-title">SIUKUR - KKPR</h1>
             <p class="app-subtitle">Sistem Informasi Uji Kesesuaian dan Pengukuran Ruang</p>
             <div class="spinner"></div>
@@ -237,6 +292,26 @@
     </div>
 
     <script>
+        // Logika Cerdas Logo (Anti-Broken Image)
+        function onLogoLoaded() {
+            const realLogo = document.getElementById('realLogo');
+            const vectorFallback = document.getElementById('vectorFallback');
+            if (realLogo) realLogo.style.display = 'block';
+            if (vectorFallback) vectorFallback.style.display = 'none';
+        }
+
+        function onLogoError(img) {
+            if (!img.dataset.triedJpg) {
+                img.dataset.triedJpg = '1';
+                img.src = 'logo.jpg';
+            } else {
+                // Jika logo.png dan logo.jpg keduanya tidak ada, sembunyikan gambar rusak
+                img.style.display = 'none';
+                const vectorFallback = document.getElementById('vectorFallback');
+                if (vectorFallback) vectorFallback.style.display = 'block';
+            }
+        }
+
         (function () {
             const frame = document.getElementById('appFrame');
             const loader = document.getElementById('loaderOverlay');
